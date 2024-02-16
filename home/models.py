@@ -8,7 +8,7 @@ class Students(models.Model):
     address = models.TextField(default="earth")
    
 class Category(models.Model):
-    category_name : models.CharField(max_length =100)
+    category_name = models.CharField(max_length =100)
 
 
 class Book(models.Model):
