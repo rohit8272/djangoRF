@@ -39,9 +39,22 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'home',
-    # 'rest_framework.authtoken',
+    'rest_framework_swagger',
     'rest_framework_simplejwt',
+    'drf_yasg',
+
 ]
+
+SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': False,  # Set to True if using session authentication
+    'SECURITY_DEFINITIONS': {
+        'Token': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    },
+}
 
 from datetime import timedelta
 SIMPLE_JWT = {

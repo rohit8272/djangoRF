@@ -4,6 +4,7 @@ from .serializer import *
 from .models import Students
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
+from drf_yasg.utils import swagger_auto_schema
 
 
 ## create user by session authentication 
@@ -47,7 +48,7 @@ def home(request):
     if request.method == 'GET':
         return Response({"message": "Hello, world!",
                          "status" : 200,
-                         "method" : "you called GET method"})
+                         "method" : "you called GET method"})   
     
     elif request.method == 'POST':
         return Response({"message": "Hello, world!",
@@ -106,9 +107,9 @@ class StudentApi(APIView):
         })
 
 
-@api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
+@api_view(['GET'])
 def get_student(request):
     stu_obj = Students.objects.all()
     serializer = Student_serializer(stu_obj , many=True)
@@ -119,20 +120,20 @@ def get_student(request):
     })
     
 ## authentication in Function based view
-
+@swagger_auto_schema(methods=['POST'] ,request_body=Student_serializer)
 @api_view(['POST'])
 def post_student(request):
     data = request.data
     serializer = Student_serializer(data = data)
     if not serializer.is_valid():
-        print(serializer.errors)
-        return Response({'status' : 400,'message' : 'something went wrong'})
+        
+        return Response({'status' : 400,"paload": serializer.errors  ,'message' : 'something went wrong'})
 
     serializer.save()
 
-    return Response({'status' : 200, 'message' : 'success student database created', "data": serializer.data })
+    return Response({'status' : 200 ,"paload": serializer.data, 'message' : 'success student database created', "data": serializer.data })
     
-
+@swagger_auto_schema(methods=['PUT'] ,request_body=Student_serializer)
 @api_view(['PUT'])
 def put_student(request , id):
     stu_obj = Students.objects.get(id = id)
